@@ -1,0 +1,2 @@
+# kefalonia-trips-starter
+

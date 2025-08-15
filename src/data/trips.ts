@@ -1,0 +1,61 @@
+import type { Trip } from '@/lib/types';
+
+export const TRIPS: Trip[] = [
+  {
+    id: 'trip_myrtos_sunset_assos',
+    slug: 'myrtos-sunset-assos-dinner',
+    title: 'Myrtos Sunset + Assos Dinner',
+    providerId: 'prov_ionian_rides',
+    poiIds: ['poi_myrtos','poi_assos'],
+    durationMin: 240,
+    priceType: 'per_person',
+    priceAmount: 80,
+    currency: 'EUR',
+    seatsMax: 8,
+    vehicleType: 'minivan',
+    languages: ['en','el','it'],
+    images: ['/images/myrtos.jpg','/images/assos.jpg'],
+    includes: ['Pickup & drop-off','Bottled water'],
+    exclusions: ['Dinner cost','Tips'],
+    ratingAvg: 4.7,
+    ratingCount: 54
+  },
+  {
+    id: 'trip_north_coast_day',
+    slug: 'north-coast-day-tour',
+    title: 'North Coast Day Tour (Myrtos, Assos, Fiskardo)',
+    providerId: 'prov_kefalonia_tours',
+    poiIds: ['poi_myrtos','poi_assos','poi_fiskardo'],
+    durationMin: 480,
+    priceType: 'fixed',
+    priceAmount: 420,
+    currency: 'EUR',
+    seatsMax: 9,
+    vehicleType: 'minivan',
+    languages: ['en','de','el'],
+    images: ['/images/fiskardo.jpg','/images/myrtos.jpg'],
+    includes: ['Pickup & drop-off','English/Greek guide'],
+    exclusions: ['Lunch','Entrance fees'],
+    ratingAvg: 4.9,
+    ratingCount: 120
+  },
+  {
+    id: 'trip_melissani_express',
+    slug: 'melissani-cave-express',
+    title: 'Melissani Cave Express',
+    providerId: 'prov_ionian_rides',
+    poiIds: ['poi_melissani','poi_agia_efimia'],
+    durationMin: 150,
+    priceType: 'hourly',
+    priceAmount: 60,
+    currency: 'EUR',
+    seatsMax: 8,
+    vehicleType: 'minivan',
+    languages: ['en','el'],
+    images: ['/images/melissani.jpg'],
+    includes: ['Pickup & drop-off'],
+    exclusions: ['Boat ticket','Snacks'],
+    ratingAvg: 4.6,
+    ratingCount: 38
+  }
+];
