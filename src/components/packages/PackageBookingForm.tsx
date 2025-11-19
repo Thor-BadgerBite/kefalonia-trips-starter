@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import VoucherCodeInput from '../booking/VoucherCodeInput';
 
 interface PackageBookingFormProps {
   packageData: {
@@ -22,6 +23,7 @@ export default function PackageBookingForm({
 }: PackageBookingFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [appliedVoucher, setAppliedVoucher] = useState<any>(null);
 
   const [formData, setFormData] = useState({
     start_date: '',
@@ -32,8 +34,15 @@ export default function PackageBookingForm({
     special_requests: '',
   });
 
-  const calculateTotalPrice = () => {
+  const calculateBasePrice = () => {
     return packageData.package_price * formData.num_guests;
+  };
+
+  const calculateTotalPrice = () => {
+    if (appliedVoucher) {
+      return appliedVoucher.final_amount;
+    }
+    return calculateBasePrice();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,6 +64,8 @@ export default function PackageBookingForm({
           special_requests: formData.special_requests,
           package_price: packageData.package_price,
           total_price: calculateTotalPrice(),
+          voucher_code: appliedVoucher?.code || null,
+          discount_amount: appliedVoucher?.discount_amount || 0,
         }),
       });
 
@@ -136,6 +147,16 @@ export default function PackageBookingForm({
             €{(packageData.package_price * formData.num_guests).toFixed(2)}
           </span>
         </div>
+        {appliedVoucher && (
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm text-green-700">
+              Discount ({appliedVoucher.code})
+            </span>
+            <span className="font-semibold text-green-700">
+              -€{appliedVoucher.discount_amount.toFixed(2)}
+            </span>
+          </div>
+        )}
         <div className="flex justify-between items-center pt-2 border-t border-blue-200">
           <span className="font-semibold text-gray-900">Total</span>
           <span className="text-2xl font-bold text-gray-900">
@@ -198,6 +219,21 @@ export default function PackageBookingForm({
               required
             />
           </div>
+        </div>
+
+        {/* Voucher Code */}
+        <div className="border-t pt-4">
+          <VoucherCodeInput
+            bookingAmount={calculateBasePrice()}
+            providerId={packageData.provider_id}
+            packageId={packageData.id}
+            customerEmail={formData.customer_email}
+            onVoucherApplied={(data) => setAppliedVoucher(data)}
+            onVoucherRemoved={() => setAppliedVoucher(null)}
+          />
+        </div>
+
+        <div className="space-y-3">
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">

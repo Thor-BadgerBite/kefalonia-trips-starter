@@ -26,6 +26,8 @@ export async function POST(request: Request) {
       special_requests,
       package_price,
       total_price,
+      voucher_code,
+      discount_amount,
     } = await request.json();
 
     // Validate required fields
@@ -72,6 +74,8 @@ export async function POST(request: Request) {
         special_requests: special_requests || null,
         package_price,
         total_price,
+        voucher_code: voucher_code || null,
+        discount_amount: discount_amount || 0,
         status: 'pending',
         payment_status: 'pending',
       })

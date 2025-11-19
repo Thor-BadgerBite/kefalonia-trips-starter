@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import type { Vehicle } from '@/lib/types';
+import VoucherCodeInput from './VoucherCodeInput';
 
 interface TripBookingFormProps {
   trip: any;
@@ -35,13 +36,23 @@ export default function TripBookingForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [appliedVoucher, setAppliedVoucher] = useState<any>(null);
 
-  // Calculate total price
-  const calculateTotalPrice = () => {
+  // Calculate base price
+  const calculateBasePrice = () => {
     if (trip.price_type === 'per_person') {
       return trip.price_amount * numGuests;
     }
     return trip.price_amount;
+  };
+
+  // Calculate total price with discount
+  const calculateTotalPrice = () => {
+    const basePrice = calculateBasePrice();
+    if (appliedVoucher) {
+      return appliedVoucher.final_amount;
+    }
+    return basePrice;
   };
 
   // Calculate end time based on trip duration
@@ -94,6 +105,8 @@ export default function TripBookingForm({
           currency: trip.currency || 'EUR',
           status: 'pending',
           special_requests: specialRequests || null,
+          voucher_code: appliedVoucher?.code || null,
+          discount_amount: appliedVoucher?.discount_amount || 0,
         })
         .select()
         .single();
@@ -184,6 +197,18 @@ export default function TripBookingForm({
           </div>
         </div>
 
+        {/* Voucher Code */}
+        <div className="border-t pt-6">
+          <VoucherCodeInput
+            bookingAmount={calculateBasePrice()}
+            providerId={trip.provider_id}
+            tripId={trip.id}
+            customerEmail={customerEmail}
+            onVoucherApplied={(data) => setAppliedVoucher(data)}
+            onVoucherRemoved={() => setAppliedVoucher(null)}
+          />
+        </div>
+
         {/* Trip Details */}
         <div className="border-t pt-6">
           <h3 className="text-lg font-semibold mb-4">Trip Details</h3>
@@ -264,6 +289,18 @@ export default function TripBookingForm({
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Guests:</span>
                 <span className="font-medium">× {numGuests}</span>
+              </div>
+            )}
+            {trip.price_type === 'per_person' && (
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Subtotal:</span>
+                <span className="font-medium">€{calculateBasePrice().toFixed(2)}</span>
+              </div>
+            )}
+            {appliedVoucher && (
+              <div className="flex justify-between text-sm text-green-600">
+                <span>Discount ({appliedVoucher.code}):</span>
+                <span className="font-medium">-€{appliedVoucher.discount_amount.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-lg font-bold border-t pt-2">

@@ -86,6 +86,13 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       return;
     }
 
+    // Get package booking details
+    const { data: packageBooking } = await supabaseAdmin
+      .from('package_bookings')
+      .select('voucher_code, customer_email, total_price')
+      .eq('id', packageBookingId)
+      .single();
+
     // Update package booking status
     const { error: bookingError } = await supabaseAdmin
       .from('package_bookings')
@@ -101,6 +108,23 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       console.error('Error updating package booking:', bookingError);
     }
 
+    // Record voucher usage if applicable
+    if (packageBooking?.voucher_code) {
+      const { error: voucherError } = await supabaseAdmin.rpc('record_voucher_use', {
+        p_code: packageBooking.voucher_code,
+        p_customer_email: packageBooking.customer_email,
+        p_booking_amount: packageBooking.total_price,
+        p_booking_type: 'package',
+        p_booking_id: packageBookingId,
+      });
+
+      if (voucherError) {
+        console.error('Error recording voucher use:', voucherError);
+      } else {
+        console.log(`Recorded voucher usage: ${packageBooking.voucher_code}`);
+      }
+    }
+
     console.log(`Payment completed for package booking ${packageBookingId}`);
     return;
   }
@@ -112,6 +136,13 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     console.error('No booking ID in session metadata');
     return;
   }
+
+  // Get booking details
+  const { data: booking } = await supabaseAdmin
+    .from('bookings')
+    .select('voucher_code, customer_email, total_price')
+    .eq('id', bookingId)
+    .single();
 
   // Update payment record
   const { error: paymentError } = await supabaseAdmin
@@ -138,6 +169,23 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 
   if (bookingError) {
     console.error('Error updating booking:', bookingError);
+  }
+
+  // Record voucher usage if applicable
+  if (booking?.voucher_code) {
+    const { error: voucherError } = await supabaseAdmin.rpc('record_voucher_use', {
+      p_code: booking.voucher_code,
+      p_customer_email: booking.customer_email,
+      p_booking_amount: booking.total_price,
+      p_booking_type: 'trip',
+      p_booking_id: bookingId,
+    });
+
+    if (voucherError) {
+      console.error('Error recording voucher use:', voucherError);
+    } else {
+      console.log(`Recorded voucher usage: ${booking.voucher_code}`);
+    }
   }
 
   console.log(`Payment completed for booking ${bookingId}`);
