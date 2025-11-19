@@ -27,10 +27,10 @@ export default function Header() {
               {t.nav.trips}
             </Link>
             <Link href="/packages" className="text-gray-700 hover:text-blue-600 font-medium transition">
-              Packages
+              {t.nav.packages}
             </Link>
             <Link href="/loyalty" className="text-gray-700 hover:text-blue-600 font-medium transition">
-              Loyalty
+              {t.nav.loyalty}
             </Link>
             <Link href="/providers" className="text-gray-700 hover:text-blue-600 font-medium transition">
               {t.nav.providers}
@@ -93,14 +93,14 @@ export default function Header() {
                 className="text-gray-700 hover:text-blue-600 font-medium py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Packages
+                {t.nav.packages}
               </Link>
               <Link
                 href="/loyalty"
                 className="text-gray-700 hover:text-blue-600 font-medium py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Loyalty
+                {t.nav.loyalty}
               </Link>
               <Link
                 href="/providers"

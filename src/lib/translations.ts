@@ -4,6 +4,8 @@ export const translations = {
     nav: {
       home: 'Home',
       trips: 'Trips',
+      packages: 'Packages',
+      loyalty: 'Loyalty',
       providers: 'Providers',
       about: 'About',
       contact: 'Contact',
@@ -99,6 +101,64 @@ export const translations = {
       accuracy: 'Accuracy',
     },
 
+    // Packages
+    packages: {
+      title: 'Package Deals',
+      subtitle: 'Save more with bundled trips',
+      discount: 'Discount',
+      save: 'Save',
+      multipleTrips: 'Multiple Trips',
+      bookPackage: 'Book Package',
+      included: 'Included in this package',
+      totalDuration: 'Total Duration',
+      noPackages: 'No packages available',
+    },
+
+    // Loyalty
+    loyalty: {
+      title: 'Loyalty Program',
+      subtitle: 'Earn points and get rewards',
+      points: 'Points',
+      tier: 'Tier',
+      myRewards: 'My Rewards',
+      earnPoints: 'Earn Points',
+      redeemRewards: 'Redeem Rewards',
+      referFriend: 'Refer a Friend',
+      referralCode: 'Referral Code',
+      pointsBalance: 'Points Balance',
+      lifetimePoints: 'Lifetime Points',
+      tiers: {
+        bronze: 'Bronze',
+        silver: 'Silver',
+        gold: 'Gold',
+        platinum: 'Platinum',
+      },
+      benefits: {
+        pointsPerBooking: 'Points per €1 spent',
+        discounts: 'Exclusive discounts',
+        prioritySupport: 'Priority support',
+        earlyAccess: 'Early access to new trips',
+      },
+    },
+
+    // Vouchers
+    vouchers: {
+      title: 'Vouchers & Promo Codes',
+      applyCode: 'Apply Code',
+      enterCode: 'Enter code',
+      remove: 'Remove',
+      applied: 'Applied',
+      codeApplied: 'Code Applied',
+      invalid: 'Invalid code',
+      expired: 'Code expired',
+      giftVoucher: 'Gift Voucher',
+      promoCode: 'Promo Code',
+      discount: 'Discount',
+      creditUsed: 'Credit Used',
+      remaining: 'Remaining',
+      maxUses: 'Maximum uses reached',
+    },
+
     // Common
     common: {
       loading: 'Loading...',
@@ -142,6 +202,8 @@ export const translations = {
     nav: {
       home: 'Αρχική',
       trips: 'Εκδρομές',
+      packages: 'Πακέτα',
+      loyalty: 'Πιστότητα',
       providers: 'Πάροχοι',
       about: 'Σχετικά',
       contact: 'Επικοινωνία',
@@ -235,6 +297,64 @@ export const translations = {
       cleanliness: 'Καθαριότητα',
       value: 'Αξία',
       accuracy: 'Ακρίβεια',
+    },
+
+    // Πακέτα
+    packages: {
+      title: 'Προσφορές Πακέτων',
+      subtitle: 'Εξοικονομήστε περισσότερα με δεσμευμένες εκδρομές',
+      discount: 'Έκπτωση',
+      save: 'Εξοικονόμηση',
+      multipleTrips: 'Πολλαπλές Εκδρομές',
+      bookPackage: 'Κράτηση Πακέτου',
+      included: 'Περιλαμβάνεται σε αυτό το πακέτο',
+      totalDuration: 'Συνολική Διάρκεια',
+      noPackages: 'Δεν υπάρχουν διαθέσιμα πακέτα',
+    },
+
+    // Πρόγραμμα Πιστότητας
+    loyalty: {
+      title: 'Πρόγραμμα Πιστότητας',
+      subtitle: 'Κερδίστε πόντους και λάβετε ανταμοιβές',
+      points: 'Πόντοι',
+      tier: 'Επίπεδο',
+      myRewards: 'Οι Ανταμοιβές μου',
+      earnPoints: 'Κερδίστε Πόντους',
+      redeemRewards: 'Εξαργυρώστε Ανταμοιβές',
+      referFriend: 'Προσκαλέστε Φίλο',
+      referralCode: 'Κωδικός Παραπομπής',
+      pointsBalance: 'Υπόλοιπο Πόντων',
+      lifetimePoints: 'Συνολικοί Πόντοι',
+      tiers: {
+        bronze: 'Χάλκινο',
+        silver: 'Ασημένιο',
+        gold: 'Χρυσό',
+        platinum: 'Πλατίνα',
+      },
+      benefits: {
+        pointsPerBooking: 'Πόντοι ανά €1 δαπάνη',
+        discounts: 'Αποκλειστικές εκπτώσεις',
+        prioritySupport: 'Προτεραιότητα υποστήριξης',
+        earlyAccess: 'Πρόωρη πρόσβαση σε νέες εκδρομές',
+      },
+    },
+
+    // Κουπόνια
+    vouchers: {
+      title: 'Κουπόνια & Κωδικοί Προσφοράς',
+      applyCode: 'Εφαρμογή Κωδικού',
+      enterCode: 'Εισαγάγετε κωδικό',
+      remove: 'Αφαίρεση',
+      applied: 'Εφαρμόστηκε',
+      codeApplied: 'Ο Κωδικός Εφαρμόστηκε',
+      invalid: 'Μη έγκυρος κωδικός',
+      expired: 'Ο κωδικός έχει λήξει',
+      giftVoucher: 'Δωροεπιταγή',
+      promoCode: 'Κωδικός Προσφοράς',
+      discount: 'Έκπτωση',
+      creditUsed: 'Πίστωση που Χρησιμοποιήθηκε',
+      remaining: 'Υπόλοιπο',
+      maxUses: 'Έχει φτάσει το μέγιστο χρήσεων',
     },
 
     // Κοινά
