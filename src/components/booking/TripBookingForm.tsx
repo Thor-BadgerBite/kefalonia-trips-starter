@@ -107,8 +107,21 @@ export default function TripBookingForm({
         body: JSON.stringify({ bookingId: booking.id }),
       }).catch((err) => console.error('Failed to send emails:', err));
 
-      // Redirect to confirmation page
-      router.push(`/booking-confirmation?booking=${booking.booking_number}`);
+      // Create Stripe checkout session and redirect to payment
+      const checkoutResponse = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bookingId: booking.id }),
+      });
+
+      const checkoutData = await checkoutResponse.json();
+
+      if (!checkoutResponse.ok || !checkoutData.url) {
+        throw new Error(checkoutData.error || 'Failed to create payment session');
+      }
+
+      // Redirect to Stripe checkout
+      window.location.href = checkoutData.url;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create booking');
       setIsSubmitting(false);
