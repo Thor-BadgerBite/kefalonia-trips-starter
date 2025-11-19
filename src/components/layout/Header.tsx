@@ -27,6 +27,9 @@ export default function Header() {
             <Link href="/packages" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Packages
             </Link>
+            <Link href="/loyalty" className="text-gray-700 hover:text-blue-600 font-medium transition">
+              Loyalty
+            </Link>
             <Link href="/providers" className="text-gray-700 hover:text-blue-600 font-medium transition">
               {t.nav.providers}
             </Link>

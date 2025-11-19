@@ -64,13 +64,13 @@ export default async function DashboardLayout({
                   href="/dashboard/trips"
                   className="text-gray-700 hover:text-blue-600 font-medium"
                 >
-                  My Trips
+                  Trips
                 </Link>
                 <Link
-                  href="/dashboard/transfers"
+                  href="/dashboard/packages"
                   className="text-gray-700 hover:text-blue-600 font-medium"
                 >
-                  Transfers
+                  Packages
                 </Link>
                 <Link
                   href="/dashboard/bookings"
@@ -79,28 +79,28 @@ export default async function DashboardLayout({
                   Bookings
                 </Link>
                 <Link
-                  href="/dashboard/fleet"
+                  href="/dashboard/messages"
                   className="text-gray-700 hover:text-blue-600 font-medium"
                 >
-                  Fleet
+                  Messages
                 </Link>
                 <Link
-                  href="/dashboard/availability"
+                  href="/dashboard/pricing"
                   className="text-gray-700 hover:text-blue-600 font-medium"
                 >
-                  Availability
+                  Pricing
                 </Link>
                 <Link
-                  href="/dashboard/working-hours"
+                  href="/dashboard/vouchers"
                   className="text-gray-700 hover:text-blue-600 font-medium"
                 >
-                  Working Hours
+                  Vouchers
                 </Link>
                 <Link
-                  href="/dashboard/custom-requests"
+                  href="/dashboard/analytics"
                   className="text-gray-700 hover:text-blue-600 font-medium"
                 >
-                  Custom Requests
+                  Analytics
                 </Link>
               </nav>
             </div>
