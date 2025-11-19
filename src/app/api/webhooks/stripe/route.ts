@@ -75,6 +75,37 @@ export async function POST(request: Request) {
 }
 
 async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
+  const bookingType = session.metadata?.booking_type;
+
+  // Handle package bookings
+  if (bookingType === 'package') {
+    const packageBookingId = session.metadata?.package_booking_id;
+
+    if (!packageBookingId) {
+      console.error('No package booking ID in session metadata');
+      return;
+    }
+
+    // Update package booking status
+    const { error: bookingError } = await supabaseAdmin
+      .from('package_bookings')
+      .update({
+        payment_status: 'paid',
+        status: 'confirmed',
+        stripe_payment_intent_id: session.payment_intent as string,
+        paid_at: new Date().toISOString(),
+      })
+      .eq('id', packageBookingId);
+
+    if (bookingError) {
+      console.error('Error updating package booking:', bookingError);
+    }
+
+    console.log(`Payment completed for package booking ${packageBookingId}`);
+    return;
+  }
+
+  // Handle regular trip bookings
   const bookingId = session.metadata?.bookingId;
 
   if (!bookingId) {

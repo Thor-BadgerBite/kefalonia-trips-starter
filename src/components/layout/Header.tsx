@@ -24,6 +24,9 @@ export default function Header() {
             <Link href="/trips" className="text-gray-700 hover:text-blue-600 font-medium transition">
               {t.nav.trips}
             </Link>
+            <Link href="/packages" className="text-gray-700 hover:text-blue-600 font-medium transition">
+              Packages
+            </Link>
             <Link href="/providers" className="text-gray-700 hover:text-blue-600 font-medium transition">
               {t.nav.providers}
             </Link>
