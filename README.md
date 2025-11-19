@@ -1,36 +1,80 @@
-# Kefalonia Trips - Phase 1 MVP
+# Kefalonia Trips - Complete Platform (Phase 2)
 
-A modern, interactive platform for discovering and booking trips and excursions in Kefalonia, Greece. This is a Phase 1 frontend prototype with mock data designed to validate UX and demonstrate the concept to stakeholders.
+A complete marketplace platform for discovering and booking trips, excursions, and transfers in Kefalonia, Greece. Connects tourists with local taxi operators and tour providers through an intuitive web platform.
 
 ## 🌟 Features
 
-### Client-Facing
-- **Interactive Map**: Browse Kefalonia landmarks (POIs) with MapLibre GL
-- **Trip Discovery**: Find trips by clicking POIs or browsing all trips
-- **Advanced Filtering**: Filter by price, duration, vehicle type, languages, and ratings
-- **Trip Details**: Beautiful trip pages with itineraries, inclusions/exclusions, and provider info
-- **Booking Flow**: Demo booking sheet with date/time/party size selection
-- **Provider Profiles**: View provider ratings, fleet, and all their custom trips
-- **Ratings & Reviews**: Display of ratings (mock data in Phase 1)
+### For Tourists (Client-Side)
 
-### Provider Features (Phase 2+)
-- Create custom trips with their own POIs, pricing, and schedules
-- Manage availability calendar
-- Receive and manage bookings
-- Dashboard with analytics
+#### Trip Discovery
+- **Interactive Map**: Browse 13+ Kefalonia landmarks (POIs) with MapLibre GL
+- **Smart Search**: Click any POI to see all trips that include it
+- **Trip Filtering**: Filter by price, duration, vehicle type, languages, and ratings
+- **Detailed Itineraries**: See stop-by-stop trip details with durations and descriptions
+- **Provider Profiles**: View ratings, reviews, fleet, and all provider offerings
+- **Booking System**: Request bookings with date/time/party size selection
+
+#### Transfer Search
+- **Point-to-Point Transfers**: Search transfers between any two locations
+- **22 Regions**: Airport, Argostoli, Lassi, Fiskardo, and 19 more areas
+- **Smart Matching**: System auto-matches your accommodation location
+- **Compare Prices**: See all available providers sorted by price or rating
+- **Multiple Vehicle Options**: Sedan, minivan, or minibus
+- **Flexible Pricing**: Per-route, per-person, or hourly rates
+
+### For Providers (Dashboard)
+
+#### Trip Creation Wizard
+- **Interactive Map**: Click POIs on map to build trip itinerary
+- **10 Stop Types with Icons**:
+  - 📸 Photo Shoot
+  - ⏰ Free Time
+  - 🛍️ Shopping Stop
+  - 🏛️ Museum Visit
+  - 🏖️ Beach Stop
+  - 🏊 Swim Stop
+  - ⛪ Monastery Visit
+  - 🍽️ Restaurant Break
+  - 👁️ Viewpoint
+  - 🍷 Wine Tasting
+- **Custom Stop Details**: Name each stop (e.g., "Myrtos Photo Shoot - 20min")
+- **Duration Management**: Set stop durations with quick presets
+- **Drag to Reorder**: Arrange stops in your preferred sequence
+- **Auto-Calculations**: System calculates total trip time including drive time
+- **Social Photos**: Upload client photos to showcase experiences
+
+#### Transfer Pricelist Management
+- **Bulk Upload**: Add multiple routes at once
+- **Flexible Pricing**: Per-route (total), per-person, or hourly
+- **Vehicle Types**: Different rates for sedan, minivan, minibus
+- **Max Passengers**: Set capacity limits per route
+- **Active/Inactive**: Control which prices are visible to clients
+- **Quick Edit/Delete**: Manage your entire pricelist
+
+#### Dashboard
+- **Real-time Stats**: Trips, bookings, ratings, today's schedule
+- **Booking Management**: View and manage all booking requests
+- **Trip Management**: List, edit, activate/deactivate your trips
+- **Calendar**: Manage availability and blocked dates
+- **Fleet Management**: Add and update your vehicles
+- **Settings**: Profile, languages, contact info
 
 ### Technical Features
 - **Next.js 14** with App Router and TypeScript
+- **Supabase** backend (PostgreSQL + PostGIS + Auth + RLS)
 - **Tailwind CSS** for styling
 - **MapLibre GL** for interactive maps
+- **Row Level Security**: Multi-tenant data isolation
 - **PWA-ready** for kiosk/tablet installations
 - **Responsive Design** - works on mobile, tablet, and desktop
+- **Real-time Data**: Live updates from database
 - **SEO-optimized** with proper meta tags
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 18+ and npm
+- Supabase account (free tier is fine)
 
 ### Installation
 
@@ -38,18 +82,24 @@ A modern, interactive platform for discovering and booking trips and excursions 
 # Install dependencies
 npm install
 
+# Set up environment variables
+cp .env.local.example .env.local
+# Edit .env.local with your Supabase credentials
+
 # Run development server
 npm run dev
 
 # Open browser to http://localhost:3000
 ```
 
-### Build for Production
+### Supabase Setup
 
-```bash
-npm run build
-npm start
-```
+Follow the detailed guide in [SETUP.md](./SETUP.md):
+
+1. Create Supabase project
+2. Run 3 migration files in SQL Editor
+3. Add environment variables
+4. Create your first provider account
 
 ## 📁 Project Structure
 
@@ -60,163 +110,199 @@ kefalonia-trips-starter/
 │   │   ├── page.tsx            # Home page with map
 │   │   ├── trips/              # Trips listing
 │   │   ├── trip/[slug]/        # Trip detail pages
+│   │   ├── transfers/          # Transfer search
 │   │   ├── poi/[slug]/         # POI detail pages
 │   │   ├── providers/[slug]/   # Provider profiles
-│   │   └── confirm/            # Booking confirmation
+│   │   ├── auth/               # Login/signup
+│   │   ├── dashboard/          # Provider dashboard
+│   │   │   ├── trips/          # Trip management
+│   │   │   │   └── create/     # Trip creation wizard
+│   │   │   ├── transfers/      # Transfer pricelist
+│   │   │   ├── bookings/       # Booking management
+│   │   │   └── vehicles/       # Fleet management
+│   │   └── api/                # API routes
 │   ├── components/             # React components
+│   │   ├── trip-creation/      # Trip wizard components
+│   │   │   ├── POIMapSelector.tsx
+│   │   │   └── TripItineraryBuilder.tsx
 │   │   ├── MapCanvas.tsx       # Interactive map
 │   │   ├── TripCard.tsx        # Trip preview cards
 │   │   ├── BookingSheet.tsx    # Booking form
 │   │   └── RatingStars.tsx     # Star ratings display
-│   ├── data/                   # Mock data
-│   │   ├── pois.ts             # Points of interest
-│   │   ├── trips.ts            # Sample trips
-│   │   └── providers.ts        # Taxi service providers
-│   └── lib/
-│       ├── types.ts            # TypeScript definitions
-│       └── store.ts            # Data access functions
-├── public/
-│   └── images/                 # Image assets
-└── package.json
+│   ├── lib/
+│   │   ├── supabase/           # Supabase clients
+│   │   │   ├── client.ts       # Browser client
+│   │   │   ├── server.ts       # Server client
+│   │   │   └── database.types.ts
+│   │   ├── types.ts            # TypeScript definitions
+│   │   └── store.ts            # Data access (Phase 1 mock)
+│   └── middleware.ts           # Route protection
+├── supabase/
+│   └── migrations/             # Database migrations
+│       ├── 20250101000000_initial_schema.sql
+│       ├── 20250101000001_seed_pois.sql
+│       └── 20250101000002_trip_creation_transfers.sql
+└── public/
+    └── images/                 # Image assets
 ```
 
 ## 🗺️ Key User Flows
 
-### 1. Browse by POI
+### Tourist Books a Trip
 ```
-Home → Click Myrtos Beach on map → See trips including Myrtos → Click trip → Book
-```
-
-### 2. Browse All Trips
-```
-Home → "Trips" nav → Filter/sort → Click trip → Book
+Home → Click Myrtos Beach on map → See 4 trips →
+Click "North Coast Day Tour" → Review itinerary →
+Book (date/time/party size) → Confirmation
 ```
 
-### 3. Explore Provider
+### Tourist Books a Transfer
 ```
-Trip detail → Click provider → See all their trips → Book another trip
-```
-
-## 📊 Current Mock Data
-
-- **5 POIs**: Myrtos Beach, Melissani Cave, Assos Village, Fiskardo, Agia Efimia
-- **3 Sample Trips**:
-  - Myrtos Sunset + Assos Dinner (4h, €80/person)
-  - North Coast Day Tour (8h, €420 fixed)
-  - Melissani Cave Express (2.5h, €60/hour)
-- **2 Providers**: Ionian Rides, Kefalonia Signature Tours
-
-## 🎯 Next Steps (Phase 2)
-
-### Backend Development
-- [ ] PostgreSQL database with PostGIS for geo queries
-- [ ] REST or GraphQL API (NestJS or FastAPI)
-- [ ] Authentication (JWT, OAuth for providers)
-- [ ] Booking system with availability management
-- [ ] Real-time availability checking
-
-### Payment Integration
-- [ ] Stripe Connect for split payouts
-- [ ] Support for deposits and full payments
-- [ ] Refund handling
-
-### Communication
-- [ ] Email notifications (booking confirmations, reminders)
-- [ ] SMS notifications via Twilio
-- [ ] In-app messaging between clients and providers
-
-### Provider Portal
-- [ ] Dashboard to create/edit trips
-- [ ] Availability calendar
-- [ ] Booking management (accept/decline/complete)
-- [ ] Earnings and analytics
-
-### Reviews System
-- [ ] Post-trip review submission
-- [ ] Photo uploads
-- [ ] Rating breakdown (comfort, punctuality, value)
-- [ ] Provider responses
-
-### Advanced Features
-- [ ] Multi-language support (EN, GR, IT, DE)
-- [ ] Dynamic pricing and promotions
-- [ ] Favorite trips and providers
-- [ ] Trip recommendations
-- [ ] Kiosk mode with QR handoff
-- [ ] iOS/Android apps (React Native or Flutter)
-
-## 🏨 Kiosk/Touch Screen Strategy
-
-The platform is designed to work on Android tablets in kiosk mode at:
-- Hotel receptions
-- Airport information desks
-- Tourist information centers
-- Popular cafés and restaurants
-
-**How it works:**
-1. Tablet runs in fullscreen kiosk mode showing the home page
-2. Tourists browse trips and POIs
-3. When ready to book, they scan a QR code to continue on their phone
-4. Booking confirmation sent via email/SMS
-
-## 💡 Monetization Options
-
-1. **Commission per booking**: 10-15% of trip value
-2. **Subscription model**: Monthly fee for providers to be listed
-3. **Hybrid**: Low subscription + reduced commission
-4. **Premium placement**: Featured listings for extra fee
-5. **Lead generation**: Pay-per-quote in low season
-
-## 🤝 Target Stakeholders
-
-### Phase 1 Demo Audience
-- **Hotel/Accommodation owners**: Show them the kiosk concept
-- **Taxi/minivan operators**: Demonstrate the provider portal concept
-- **Tourism associations**: Pitch the marketplace vision
-- **Early investors**: Validate market fit
-
-## 📝 Customization Guide
-
-### Adding New POIs
-
-Edit `src/data/pois.ts`:
-
-```typescript
-{
-  id: 'poi_your_id',
-  slug: 'your-slug',
-  name: 'Your POI Name',
-  lat: 38.xxxx,    // Latitude
-  lon: 20.xxxx,    // Longitude
-  categories: ['Beaches', 'Scenic'],
-  images: ['https://...'],
-  shortDesc: 'Brief description'
-}
+Transfers → Select Airport → Select Argostoli →
+Enter passengers → Search → Compare 5 providers →
+Choose by price/rating → Book transfer
 ```
 
-### Adding New Trips
+### Provider Creates Trip
+```
+Login → Dashboard → Create Trip →
+Enter trip name & pricing →
+Click POIs on map (Myrtos, Assos, Fiskardo) →
+For each stop:
+  - Select type (Photo Shoot)
+  - Set duration (20 min)
+  - Add custom name & description
+→ System calculates total time → Save trip
+```
 
-Edit `src/data/trips.ts` and link to existing POI IDs.
+### Provider Adds Transfer Prices
+```
+Dashboard → Transfers → Add Prices →
+Select "From Airport" →
+Multi-select destinations (Argostoli, Lassi, etc.) →
+Set vehicle type & price →
+System creates 10+ routes at once
+```
 
-### Styling
+## 📊 Database Schema
 
-- Global styles: `src/app/globals.css`
-- Tailwind config: `tailwind.config.ts`
-- Color scheme: Currently using blue (`blue-600`) as primary
+### Core Tables
+- **providers** - Taxi operators/tour companies
+- **vehicles** - Provider fleet
+- **pois** - Points of interest (13 seeded)
+- **trips** - Custom trips created by providers
+- **trip_pois** - Trip itinerary with stop details
+- **poi_stop_types** - 10 predefined stop types
+- **transfer_regions** - 22 Kefalonia areas
+- **transfer_pricelists** - Point-to-point transfer rates
+- **bookings** - Customer booking requests
+- **availability** - Provider calendar
+- **reviews** - Customer feedback
 
-## 🐛 Known Limitations (Phase 1)
+### Key Features
+- **PostGIS** for geographic calculations
+- **RLS (Row Level Security)** for multi-tenancy
+- **Auto-triggers** for timestamps and booking numbers
+- **Functions** for distance/time calculations
 
-- No real authentication
-- No real-time availability
-- No actual payment processing
-- No email/SMS notifications
-- Mock ratings and reviews
-- No provider dashboard yet
-- Limited POI data (only 5 locations)
+## 🎯 Current Status
 
-## 📞 Support
+### ✅ Completed (Phase 1 & 2)
+- [x] Interactive map with POI markers
+- [x] Trip browsing and search
+- [x] Provider authentication
+- [x] Provider dashboard
+- [x] Trip creation wizard with map
+- [x] POI stop types with icons
+- [x] Automatic time/distance calculations
+- [x] Trip management (list/edit)
+- [x] Transfer pricelist management
+- [x] Transfer search for clients
+- [x] Supabase integration
+- [x] Database schema & migrations
+- [x] Row level security policies
 
-For questions about this codebase or the Kefalonia Trips project, contact the development team.
+### 🚧 Phase 3 (Next Steps)
+- [ ] Real booking system with database storage
+- [ ] Email notifications (Resend integration)
+- [ ] SMS notifications (Twilio)
+- [ ] Payment processing (Stripe Connect)
+- [ ] Availability calendar UI
+- [ ] Review submission system
+- [ ] Trip editing functionality
+- [ ] Provider vehicle management
+- [ ] Multi-language support (Greek, Italian, German)
+- [ ] Photo upload for trips and reviews
+
+## 💡 Usage Examples
+
+### Example 1: Airport Transfer Provider
+
+Provider "Ionian Transfers" wants to offer airport pickups:
+
+1. Login → Dashboard → Transfers
+2. From: Airport
+3. To: Select all accommodation areas (Argostoli, Lassi, Fiskardo, etc.)
+4. Vehicle: Minivan
+5. Price: €45 per route
+6. Max passengers: 8
+7. Saves 15 transfer routes instantly
+
+Now when tourists search "Airport → Argostoli", they see this provider's €45 offer.
+
+### Example 2: Custom Trip Creation
+
+Provider "Kefalonia Tours" creates "Highlights Tour":
+
+1. Dashboard → Create Trip
+2. Name: "North Coast Highlights"
+3. Click POIs on map:
+   - Myrtos Beach (Photo Shoot, 20 min)
+   - Assos Village (Free Time, 1 hour)
+   - Fiskardo (Restaurant Break, 1.5 hours)
+4. System calculates: 3 stops + 90min drive time = 4 hours total
+5. Set price: €85 per person
+6. Save → Trip goes live
+
+Tourists clicking "Myrtos Beach" now see this trip.
+
+## 🔐 Security
+
+- **Supabase Authentication** with email/password
+- **Row Level Security (RLS)** - providers only see their data
+- **Protected routes** via Next.js middleware
+- **Environment variables** for sensitive keys
+- **HTTPS** enforcement in production
+- **Input validation** on all forms
+- **SQL injection protection** via Supabase client
+
+## 📈 Scalability
+
+- **Supabase** handles up to 500GB free tier
+- **Vercel** for serverless frontend (auto-scaling)
+- **PostGIS** efficient for geographic queries
+- **CDN** for static assets
+- **Database indexes** on all foreign keys
+- **Pagination** ready for large datasets
+
+## 🚀 Deployment
+
+### Frontend (Vercel)
+```bash
+# Connect GitHub repo to Vercel
+# Set environment variables
+# Auto-deploy on push
+```
+
+### Database (Supabase)
+- Already hosted in the cloud
+- Automatic backups on paid plans
+- Run migrations via SQL Editor or CLI
+
+## 🤝 Contributing
+
+This is a private project for Kefalonia tourism operators. For access or questions:
+- Create an issue in the repository
+- Contact the development team
 
 ## 📄 License
 
@@ -224,4 +310,4 @@ Private - All Rights Reserved
 
 ---
 
-**Built with ❤️ for Kefalonia's tourism community**
+**Built for Kefalonia's tourism community** 🇬🇷

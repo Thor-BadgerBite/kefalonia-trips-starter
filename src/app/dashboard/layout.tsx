@@ -67,16 +67,16 @@ export default async function DashboardLayout({
                   My Trips
                 </Link>
                 <Link
+                  href="/dashboard/transfers"
+                  className="text-gray-700 hover:text-blue-600 font-medium"
+                >
+                  Transfers
+                </Link>
+                <Link
                   href="/dashboard/bookings"
                   className="text-gray-700 hover:text-blue-600 font-medium"
                 >
                   Bookings
-                </Link>
-                <Link
-                  href="/dashboard/availability"
-                  className="text-gray-700 hover:text-blue-600 font-medium"
-                >
-                  Availability
                 </Link>
                 <Link
                   href="/dashboard/vehicles"
