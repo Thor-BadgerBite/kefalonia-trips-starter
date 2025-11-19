@@ -181,3 +181,49 @@ export interface WorkingHours {
   created_at: string;
   updated_at: string;
 }
+
+export interface CustomTripRequest {
+  id: string;
+  request_number: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  trip_date: string;
+  start_time: string;
+  num_guests: number;
+  vehicle_type: string | null;
+  special_requests: string | null;
+  total_estimated_cost: number | null;
+  total_duration_minutes: number | null;
+  total_distance_km: number | null;
+  status: 'pending' | 'quoted' | 'accepted' | 'rejected' | 'cancelled' | 'completed';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CustomTripRequestPOI {
+  id: string;
+  request_id: string;
+  poi_id: string;
+  order_index: number;
+  duration_at_poi: number;
+  notes: string | null;
+  created_at: string;
+  poi?: POI;
+}
+
+export interface CustomTripQuote {
+  id: string;
+  request_id: string;
+  provider_id: string;
+  quoted_price: number;
+  estimated_price: number | null;
+  vehicle_id: string | null;
+  provider_notes: string | null;
+  status: 'pending' | 'sent' | 'accepted' | 'rejected' | 'expired';
+  valid_until: string | null;
+  created_at: string;
+  updated_at: string;
+  provider?: Provider;
+  vehicle?: Vehicle;
+}

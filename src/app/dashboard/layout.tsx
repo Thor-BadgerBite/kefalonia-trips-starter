@@ -96,6 +96,12 @@ export default async function DashboardLayout({
                 >
                   Working Hours
                 </Link>
+                <Link
+                  href="/dashboard/custom-requests"
+                  className="text-gray-700 hover:text-blue-600 font-medium"
+                >
+                  Custom Requests
+                </Link>
               </nav>
             </div>
             <div className="flex items-center gap-4">
