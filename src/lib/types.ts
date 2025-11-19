@@ -169,3 +169,15 @@ export interface Booking {
   trip?: Trip;
   vehicle?: Vehicle;
 }
+
+export interface WorkingHours {
+  id: string;
+  provider_id: string;
+  day_of_week: number; // 0=Sunday, 1=Monday, ..., 6=Saturday
+  start_time: string;
+  end_time: string;
+  active: boolean;
+  label: string | null;
+  created_at: string;
+  updated_at: string;
+}
