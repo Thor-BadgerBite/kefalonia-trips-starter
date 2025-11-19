@@ -79,10 +79,16 @@ export default async function DashboardLayout({
                   Bookings
                 </Link>
                 <Link
-                  href="/dashboard/vehicles"
+                  href="/dashboard/fleet"
                   className="text-gray-700 hover:text-blue-600 font-medium"
                 >
                   Fleet
+                </Link>
+                <Link
+                  href="/dashboard/availability"
+                  className="text-gray-700 hover:text-blue-600 font-medium"
+                >
+                  Availability
                 </Link>
               </nav>
             </div>

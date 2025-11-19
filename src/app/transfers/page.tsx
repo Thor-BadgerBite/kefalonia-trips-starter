@@ -12,6 +12,8 @@ export default function TransferSearchPage() {
   const [fromRegion, setFromRegion] = useState('');
   const [toRegion, setToRegion] = useState('');
   const [passengers, setPassengers] = useState('2');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [results, setResults] = useState<any[]>([]);
   const [searched, setSearched] = useState(false);
 
@@ -63,10 +65,43 @@ export default function TransferSearchPage() {
     if (error) {
       console.error('Search error:', error);
       alert('Failed to search transfers');
-    } else {
-      setResults(data || []);
+      setLoading(false);
+      return;
     }
 
+    let filteredResults = data || [];
+
+    // Filter by availability if date and time provided
+    if (date && time && data) {
+      // Estimate transfer duration (1 hour for most transfers)
+      const [hours, minutes] = time.split(':').map(Number);
+      const startMinutes = hours * 60 + minutes;
+      const endMinutes = startMinutes + 60; // 1 hour default
+      const endHours = Math.floor(endMinutes / 60);
+      const endMins = endMinutes % 60;
+      const endTime = `${endHours.toString().padStart(2, '0')}:${endMins.toString().padStart(2, '0')}`;
+
+      const availabilityChecks = await Promise.all(
+        data.map(async (transfer: any) => {
+          const { data: available } = await supabase.rpc('provider_has_available_vehicle', {
+            p_provider_id: transfer.provider_id,
+            p_date: date,
+            p_start_time: time,
+            p_end_time: endTime,
+            p_min_capacity: parseInt(passengers) || 1,
+          });
+
+          return { transferId: transfer.id, available: available || false };
+        })
+      );
+
+      const availabilityMap = new Map(
+        availabilityChecks.map((check) => [check.transferId, check.available])
+      );
+      filteredResults = data.filter((transfer: any) => availabilityMap.get(transfer.id));
+    }
+
+    setResults(filteredResults);
     setLoading(false);
   }
 
@@ -163,6 +198,35 @@ export default function TransferSearchPage() {
                 />
               </div>
             </div>
+
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Date (Optional)</label>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                  className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Pickup Time (Optional)</label>
+                <input
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white"
+                />
+              </div>
+            </div>
+
+            {date && time && (
+              <div className="bg-blue-800 bg-opacity-50 rounded-lg p-3 mb-4 text-white text-sm">
+                ✓ Availability check enabled: Only showing providers with available vehicles on your selected date and time
+              </div>
+            )}
 
             <button
               onClick={handleSearch}

@@ -106,3 +106,66 @@ export interface ProviderPOITemplate {
   poi?: POI;
   stop_type?: POIStopType;
 }
+
+export interface Vehicle {
+  id: string;
+  provider_id: string;
+  type: string;
+  model: string;
+  capacity: number;
+  active: boolean;
+  image_urls: string[];
+  primary_image_url: string | null;
+  description: string | null;
+  features: string[];
+  license_plate: string | null;
+  year: number | null;
+  color: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface VehicleFeature {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+}
+
+export interface Availability {
+  id: string;
+  provider_id: string;
+  vehicle_id: string | null;
+  date: string;
+  start_time: string;
+  end_time: string;
+  is_available: boolean;
+  reason: string | null;
+  booking_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Booking {
+  id: string;
+  booking_number: string;
+  provider_id: string;
+  trip_id: string | null;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  booking_date: string;
+  start_time: string | null;
+  end_time: string | null;
+  duration_minutes: number | null;
+  num_guests: number;
+  total_price: number;
+  currency: string;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'rejected';
+  special_requests: string | null;
+  vehicle_id: string | null;
+  created_at: string;
+  updated_at: string;
+  trip?: Trip;
+  vehicle?: Vehicle;
+}
