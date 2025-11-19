@@ -242,7 +242,45 @@ async function handleChargeRefunded(charge: Stripe.Charge) {
     .eq('stripe_payment_intent_id', paymentIntentId)
     .single();
 
-  if (!payment) return;
+  if (!payment) {
+    // Check if this is a package booking
+    const { data: packageBooking } = await supabaseAdmin
+      .from('package_bookings')
+      .select('*')
+      .eq('stripe_payment_intent_id', paymentIntentId)
+      .single();
+
+    if (packageBooking) {
+      // Handle package booking refund
+      const refundAmount = charge.amount_refunded / 100;
+
+      // Update package booking status
+      const { error: bookingError } = await supabaseAdmin
+        .from('package_bookings')
+        .update({
+          payment_status: 'refunded',
+          status: 'cancelled',
+        })
+        .eq('id', packageBooking.id);
+
+      if (bookingError) {
+        console.error('Error updating package booking after refund:', bookingError);
+      }
+
+      // Refund voucher if one was used
+      const { error: voucherRefundError } = await supabaseAdmin.rpc('refund_voucher', {
+        p_booking_type: 'package',
+        p_booking_id: packageBooking.id,
+      });
+
+      if (voucherRefundError) {
+        console.error('Error refunding voucher for package:', voucherRefundError);
+      } else {
+        console.log(`Voucher refunded for package booking ${packageBooking.id}`);
+      }
+    }
+    return;
+  }
 
   // Calculate refund amount (in dollars/euros)
   const refundAmount = charge.amount_refunded / 100;
@@ -273,5 +311,17 @@ async function handleChargeRefunded(charge: Stripe.Charge) {
 
   if (bookingError) {
     console.error('Error updating booking after refund:', bookingError);
+  }
+
+  // Refund voucher if one was used
+  const { error: voucherRefundError } = await supabaseAdmin.rpc('refund_voucher', {
+    p_booking_type: 'trip',
+    p_booking_id: payment.booking_id,
+  });
+
+  if (voucherRefundError) {
+    console.error('Error refunding voucher:', voucherRefundError);
+  } else {
+    console.log(`Voucher refunded for trip booking ${payment.booking_id}`);
   }
 }

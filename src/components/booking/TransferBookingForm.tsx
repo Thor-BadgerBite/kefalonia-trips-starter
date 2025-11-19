@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import type { Vehicle } from '@/lib/types';
+import VoucherCodeInput from './VoucherCodeInput';
 
 interface TransferBookingFormProps {
   provider: any;
@@ -42,6 +43,17 @@ export default function TransferBookingForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [appliedVoucher, setAppliedVoucher] = useState<any>(null);
+
+  // Calculate prices with discount
+  const calculateTotalPrice = () => {
+    if (appliedVoucher) {
+      return appliedVoucher.final_amount;
+    }
+    return estimatedPrice;
+  };
+
+  const totalPrice = calculateTotalPrice();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,10 +95,12 @@ export default function TransferBookingForm({
           end_time: null, // Transfer end time not predetermined
           duration_minutes: 60, // Estimate 1 hour
           num_guests: numPassengers,
-          total_price: estimatedPrice,
+          total_price: totalPrice,
           currency: 'EUR',
           status: 'pending',
           special_requests: transferNote + (specialRequests ? `\n\nAdditional requests: ${specialRequests}` : ''),
+          voucher_code: appliedVoucher?.code || null,
+          discount_amount: appliedVoucher?.discount_amount || 0,
         })
         .select()
         .single();
@@ -170,6 +184,17 @@ export default function TransferBookingForm({
               />
             </div>
           </div>
+        </div>
+
+        {/* Voucher Code */}
+        <div className="border-t pt-6">
+          <VoucherCodeInput
+            bookingAmount={estimatedPrice}
+            providerId={provider.id}
+            customerEmail={customerEmail}
+            onVoucherApplied={(data) => setAppliedVoucher(data)}
+            onVoucherRemoved={() => setAppliedVoucher(null)}
+          />
         </div>
 
         {/* Transfer Details */}
@@ -287,10 +312,20 @@ export default function TransferBookingForm({
         {/* Price Summary */}
         <div className="border-t pt-6">
           <h3 className="text-lg font-semibold mb-4">Price</h3>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex justify-between text-lg font-bold">
+          <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600">Estimated price:</span>
+              <span className="font-medium">€{estimatedPrice.toFixed(2)}</span>
+            </div>
+            {appliedVoucher && (
+              <div className="flex justify-between text-sm text-green-600">
+                <span>Discount ({appliedVoucher.code}):</span>
+                <span className="font-medium">-€{appliedVoucher.discount_amount.toFixed(2)}</span>
+              </div>
+            )}
+            <div className="flex justify-between text-lg font-bold border-t pt-2">
               <span>Estimated Total:</span>
-              <span className="text-blue-600">€{estimatedPrice.toFixed(2)}</span>
+              <span className="text-blue-600">€{totalPrice.toFixed(2)}</span>
             </div>
             <p className="text-xs text-gray-600 mt-2">
               Final price confirmed by provider after reviewing exact addresses
@@ -360,7 +395,7 @@ export default function TransferBookingForm({
         >
           {isSubmitting
             ? 'Processing...'
-            : `Request Transfer - €${estimatedPrice.toFixed(2)}`}
+            : `Request Transfer - €${totalPrice.toFixed(2)}`}
         </button>
 
         <p className="text-xs text-center text-gray-500">
