@@ -100,6 +100,13 @@ export default function TripBookingForm({
 
       if (bookingError) throw bookingError;
 
+      // Send confirmation emails (non-blocking)
+      fetch('/api/send-booking-emails', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bookingId: booking.id }),
+      }).catch((err) => console.error('Failed to send emails:', err));
+
       // Redirect to confirmation page
       router.push(`/booking-confirmation?booking=${booking.booking_number}`);
     } catch (err) {
